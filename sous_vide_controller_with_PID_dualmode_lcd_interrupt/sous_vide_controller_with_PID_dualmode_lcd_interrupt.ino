@@ -1,5 +1,5 @@
 // wireless sous vide controller
-// 06-01-2012
+// 07-01-2012
 // 
 // connect temp sensor to DIO4 (arduino digital pin 7)
 // connect lcd display to DIO3 (arduino digital pin 6)
