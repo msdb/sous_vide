@@ -1,4 +1,4 @@
-sous-vide controller - work in progress
+wireless sous-vide controller - work in progress
 
 version 0.1
-07-01-2012
+08-01-2012
