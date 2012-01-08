@@ -1,5 +1,5 @@
 // wireless sous vide controller
-// 06-01-2012
+// 08-01-2012
 // 
 // connect temp sensor to DIO4 (arduino digital pin 7)
 // connect lcd display to DIO3 (arduino digital pin 6)
@@ -196,18 +196,18 @@ void isr_2(){                                             // Pin3 went LOW
 void setup() {
      windowStartTime = millis();
      
-       
+     Sleepy::loseSomeTime(32);  
      rf12_initialize(0, RF12_868MHZ);    // initialize FS20 transmitter
      fs20cmd(0x1778, 1, 0);      // turn off FS20 switch old:0x1234
      // Power down radio:
      rf12_sleep(RF12_SLEEP);
      
      sensors.begin(); // Start up the DS18B20 one-wire library
-     Sleepy::loseSomeTime(100);
+     Sleepy::loseSomeTime(96);
      sensors.getAddress(ta, 0); // set the resolution to 12 bit
-     Sleepy::loseSomeTime(100); 
+     Sleepy::loseSomeTime(96); 
      sensors.setResolution(ta, 12);
-     Sleepy::loseSomeTime(100);  
+     Sleepy::loseSomeTime(96);  
      
      Input = tempa;
      Setpoint = value;  // Initialize PID Setpoint variable
@@ -235,7 +235,7 @@ void setup() {
    lcd.clear();
    lcd.cursor(0);         // hidden cursor
    lcd.backlight(6);     // LCD backlight level (0-29)
-   Sleepy::loseSomeTime(50);
+   Sleepy::loseSomeTime(48);
   
     #if SERIAL
         Serial.begin(57600);
@@ -248,6 +248,8 @@ void setup() {
 }
 
 void loop() {
+    
+    Sleepy::loseSomeTime(96);
   
     if(pushbutton == 1){                    // Change target value if button is pressed
       if(number != oldnumber){              // Change in value ?
