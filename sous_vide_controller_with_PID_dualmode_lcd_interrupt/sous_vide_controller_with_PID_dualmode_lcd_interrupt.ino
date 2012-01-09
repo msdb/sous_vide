@@ -1,5 +1,5 @@
 // wireless sous vide controller
-// 07-01-2012
+// 09-01-2012
 // 
 // connect temp sensor to DIO4 (arduino digital pin 7)
 // connect lcd display to DIO3 (arduino digital pin 6)
@@ -15,9 +15,9 @@
 #include "SparkSoftLCD.h"       // Serial LCD library
 #include <PinChangeInt.h>       // Change hardware interrupts Library
 
-ISR(WDT_vect) { Sleepy::watchdogEvent(); }  // Use the watchdog to wake the processor from sleep:
+//ISR(WDT_vect) { Sleepy::watchdogEvent(); }  // Use the watchdog to wake the processor from sleep:
 
-#define SERIAL  1   // set to 1 to also report readings on the serial port
+#define SERIAL  0   // set to 1 to also report readings on the serial port
 #define DEBUG 0
 #define PIN1 14 // defines arduino analog pin as interrupt pin1 -> analog pin 1
 #define PIN2 15 // defines arduino analog pin as interrupt pin2 -> analog pin 2
@@ -197,11 +197,11 @@ void setup() {
      windowStartTime = millis();
      
      sensors.begin(); // Start up the DS18B20 one-wire library
-     Sleepy::loseSomeTime(100);
+     delay(100);
      sensors.getAddress(ta, 0); // set the resolution to 12 bit
-     Sleepy::loseSomeTime(100); 
+     delay(100); 
      sensors.setResolution(ta, 12);
-     Sleepy::loseSomeTime(100);  
+     delay(100);  
      
      Input = tempa;
      Setpoint = value;  // Initialize PID Setpoint variable
@@ -229,7 +229,7 @@ void setup() {
    lcd.clear();
    lcd.cursor(0);         // hidden cursor
    lcd.backlight(6);     // LCD backlight level (0-29)
-   Sleepy::loseSomeTime(50);
+   delay(50);
   
     #if SERIAL
         Serial.begin(57600);
