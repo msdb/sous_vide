@@ -223,7 +223,7 @@ void setup() {
   PCintPort::attachInterrupt(PIN2, &isr_2, FALLING); // Call isr_2 when digital PIN2 goes LOW
   PCintPort::attachInterrupt(switchPin, &readswitch, FALLING); // Call readswitch when digital PIN8 goes LOW
 
-    // setop LCD display
+    // setup LCD display
    pinMode(LCD_TX, OUTPUT);
    lcd.begin(9600);
    lcd.clear();
