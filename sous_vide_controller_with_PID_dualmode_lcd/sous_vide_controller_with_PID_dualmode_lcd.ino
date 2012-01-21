@@ -75,6 +75,8 @@ PID myPID(&Input, &Output, &Setpoint,Kp_AGR,Ki_AGR,Kd_AGR, DIRECT);
 int WindowSize = 1000; // a value below 1000 is problematic: short OOK Interval
 unsigned long windowStartTime;
 
+ISR(WDT_vect) { Sleepy::watchdogEvent(); }  // Use the watchdog to wake the processor from sleep:
+
 
 
 
@@ -130,6 +132,8 @@ static void doMeasure() {
     #if DEBUG
         Serial.print(tempa);
         Serial.println(" ");
+        Serial.flush();
+        delay(5);
     #endif
 }
 
@@ -137,12 +141,16 @@ static void doMeasure() {
 void setup() {
      windowStartTime = millis();
      
+     Sleepy::loseSomeTime(32);  
+     rf12_initialize(0, RF12_868MHZ);    // initialize FS20 transmitter
+     fs20cmd(0x1778, 1, 0);      // turn off FS20 switch old:0x1234
+     
      sensors.begin(); // Start up the DS18B20 one-wire library
-     delay(100);
+     Sleepy::loseSomeTime(48);
      sensors.getAddress(ta, 0); // set the resolution to 12 bit
-     delay(100); 
+     Sleepy::loseSomeTime(48); 
      sensors.setResolution(ta, 12);
-     delay(100);  
+     Sleepy::loseSomeTime(48); 
      
      Input = tempa;
      Setpoint = 53.5;  // Initialize PID Setpoint variable 55°C
@@ -152,22 +160,22 @@ void setup() {
      myPID.SetOutputLimits(0, WindowSize);
      myPID.SetMode(AUTOMATIC);   // turn PID on
 
-    // setop LCD display
+    // setup LCD display
    pinMode(LCD_TX, OUTPUT);
    lcd.begin(9600);
    lcd.clear();
    lcd.cursor(0);         // hidden cursor
    lcd.backlight(6);     // LCD backlight level (0-29)
-   delay(50);
+   Sleepy::loseSomeTime(48);
   
     #if SERIAL
         Serial.begin(57600);
         Serial.print("\n[Wireless Sous Vide Controller]");
         Serial.println(" ");
+        Serial.flush();
+        delay(5);
     #endif
-  
-    rf12_initialize(0, RF12_868MHZ);    // initialize FS20 transmitter
-    fs20cmd(0x1778, 1, 0);      // turn off FS20 switch old:0x1234
+       
 }
 
 void loop() {
@@ -181,7 +189,6 @@ void loop() {
     lcd.cursorTo(2,1);
     lcd.print("Temp:   ");
     lcd.print(str1); 
-    //lcd.print(tempb,1.0);
     lcd.print(" C");
 
     if (abs(Setpoint-Input)<Gap) {
@@ -207,12 +214,14 @@ void loop() {
     
     #if SERIAL
         time = millis();
+        Serial.print(ttemp);
+        Serial.print(",");
         Serial.print(Input);
         Serial.print(",");
         Serial.print(time);
         Serial.println(" ");
-        //Serial.println(str1);
-        //Serial.println(" ");
+        Serial.flush();
+        delay(5);
     #endif
     
 }
