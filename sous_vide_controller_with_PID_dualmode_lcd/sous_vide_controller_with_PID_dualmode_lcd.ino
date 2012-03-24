@@ -1,4 +1,4 @@
-// wireless sous vide controller
+r// wireless sous vide controller
 // 08-11-2011
 // 
 // connect temp sensor to DIO4
@@ -153,7 +153,7 @@ void setup() {
      Sleepy::loseSomeTime(48); 
      
      Input = tempa;
-     Setpoint = 53.5;  // Initialize PID Setpoint variable 55°C, 53.5°C rind, 63,5 Hühnchen
+     Setpoint = 62.5;  // Initialize PID Setpoint variable 55°C, 53.5°C rind, 63,5 Hühnchen
      ttemp = Setpoint;
      
      //tell the PID to range between 0 and the full window size
